@@ -44,13 +44,10 @@ endif ()
 
 # dont set the mcu speed, it is done elsewhere
 # set(COMPILE_FLAGS "-DF_CPU=${FCPU} ${CPU_FLAGS} -DARDUINO=${NORMALIZED_SDK_VERSION} ")
-set(COMPILE_FLAGS " ${CPU_FLAGS} -DARDUINO=${NORMALIZED_SDK_VERSION} ")
+set(COMPILE_FLAGS "${CPU_FLAGS} -DARDUINO=${NORMALIZED_SDK_VERSION}")
 # This should be derived from the arduino config files
 # hardcode them for the moment
-
-
-#
-set(STM32_SYSTEM_ROOT "-I\"${ARDUINO_PLATFORM_PATH}/system\"")
+#set(STM32_SYSTEM_ROOT "-I\"${PLATFORM_TOOLCHAIN_PATH}/system")
 
 #set(COMPILE_FLAGS "${COMPILE_FLAGS} ${STM32_SYSTEM_ROOT}/libmaple/\" ") # Hack, there is a better way to get the system path
 #set(COMPILE_FLAGS "${COMPILE_FLAGS} ${STM32_SYSTEM_ROOT}/libmaple/include\" ") # Hack
@@ -74,7 +71,7 @@ add_to_compile_flags(build.variant "BOARD_")
 
 
 dbg("Final Compile flags for STM32: ${COMPILE_FLAGS}")
-#
-#set(COMPILE_FLAGS "${COMPILE_FLAGS} -std=gnu11 -MMD -DDEBUG_LEVEL=DEBUG_NONE ")
+
+#set(COMPILE_FLAGS "${COMPILE_FLAGS} -std=gnu11 -MMD -DDEBUG_LEVEL=DEBUG_NONE ")`
 
 

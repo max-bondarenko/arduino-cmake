@@ -1,28 +1,27 @@
-SET(CMAKE_TOOLCHAIN_FILE cmake/ArduinoToolchain.cmake)
+SET(CMAKE_TOOLCHAIN_FILE ArduinoToolchain.cmake)
 cmake_minimum_required(VERSION 3.8)
-#TODO ABI & Check for working C compiler EROORS
-#file(GLOB_RECURSE SRCS_HELO src/*)
+
+file(GLOB_RECURSE SRCS_HELLO test-lib/*)
 
 SET(PLATFORM_PATH $ENV{HOME}/.platformio/packages/framework-arduinoststm32)
 SET(TOOLCHAIN_PATH "$ENV{HOME}/.platformio/packages/toolchain-gccarmnoneeabi")
 
-project(cnc_3018 C CXX)
+project(test-cmake C CXX)
 
 SET(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 11)
 
 #print_board_list()
-#print_board_settings(nano)
+#print_board_settings(Nucleo_144)
 #print_programmer_list()
 #
 #generate_arduino_firmware(hello
-#        MANUAL
-#        SRCS ${SRCS_HELO}
+#        SRCS ${SRCS_HELLO}
 #        BOARD GenF1
 #        BOARD_CPU BLUEPILL_F103C6
 #        PORT /dev/ttyACM0
 #        )
-#make_core_library(ASD "nano.atmega328")
+make_core_library(ASD "GenF1.BLACKPILL_F103C8")
 #make_arduino_example(blink "Blink" ALL_SRCS "Basics" )
 #make_arduino_sketch(blink "/opt/arduino-1.8.19/examples/01.Basics/Blink" SKETCH_CPP )
 #generate_arduino_example(blink

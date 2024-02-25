@@ -12,16 +12,24 @@
 #
 #=============================================================================#
 function(make_core_library OUTPUT_VAR BOARD_ID)
-    set(CORE_LIB_NAME ${BOARD_ID}_CORE)
+    set(CORE_LIB_NAME core_${BOARD_ID})
     _get_board_property(${BOARD_ID} build.core BOARD_CORE)
 
     if (BOARD_CORE)
         if (NOT TARGET ${CORE_LIB_NAME})
             set(BOARD_CORE_PATH ${${BOARD_CORE}.path})
             find_sources(CORE_SRCS ${BOARD_CORE_PATH} True)
+            find_headers(CORE_HDRS ${BOARD_CORE_PATH} True)
             # Debian/Ubuntu fix
             list(REMOVE_ITEM CORE_SRCS "${BOARD_CORE_PATH}/main.cxx")
             add_library(${CORE_LIB_NAME} ${CORE_SRCS})
+            target_include_directories(${CORE_LIB_NAME}
+                    PUBLIC ${BOARD_CORE_PATH};${BOARD_CORE_PATH}/${CMAKE_SYSTEM_PROCESSOR}
+                    )
+
+#            target_compile_definitions(${CORE_LIB_NAME}
+#                    PUBLIC "STM32F1xx")
+
             set_board_flags(ARDUINO_COMPILE_FLAGS ARDUINO_LINK_FLAGS ${BOARD_ID} FALSE)
             set_target_properties(${CORE_LIB_NAME} PROPERTIES
                     COMPILE_FLAGS "${ARDUINO_COMPILE_FLAGS}"

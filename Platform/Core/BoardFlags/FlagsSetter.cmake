@@ -1,4 +1,3 @@
-
 #=============================================================================#
 # _sanitize_quotes
 # [PRIVATE/INTERNAL]
@@ -57,7 +56,8 @@ function(set_board_compiler_flags COMPILER_FLAGS NORMALIZED_SDK_VERSION BOARD_ID
 
     if (NOT IS_MANUAL)
         _get_board_property(${BOARD_ID} build.core BOARD_CORE)
-        set(COMPILE_FLAGS "${COMPILE_FLAGS} -I\"${${BOARD_CORE}.path}\" -I\"${${CMAKE_SYSTEM_PROCESSOR}_LIBRARIES_PATH}\"") # TODO _PATH
+#        no -I manually
+#        set(COMPILE_FLAGS "${COMPILE_FLAGS} -I\"${${BOARD_CORE}.path}\" -I\"${${CMAKE_SYSTEM_PROCESSOR}_LIBRARIES_PATH}\"") # TODO _PATH
         if (${${CMAKE_SYSTEM_PROCESSOR}_PLATFORM_LIBRARIES_PATH})
             set(COMPILE_FLAGS "${COMPILE_FLAGS} -I\"${${CMAKE_SYSTEM_PROCESSOR}_PLATFORM_LIBRARIES_PATH}\"")
         endif ()
@@ -67,7 +67,7 @@ function(set_board_compiler_flags COMPILER_FLAGS NORMALIZED_SDK_VERSION BOARD_ID
             _get_board_property(${BOARD_ID} build.variant VARIANT)
             set(PIN_HEADER ${${VARIANT}.path}) # should resolve to path but not
             if (PIN_HEADER)
-                set(COMPILE_FLAGS "${COMPILE_FLAGS} -I\"${PIN_HEADER}\"")
+#                set(COMPILE_FLAGS "${COMPILE_FLAGS} -I\"${PIN_HEADER}\"") TODO no -I FIX
             endif ()
         endif ()
     endif ()

@@ -24,13 +24,11 @@ endfunction()
 #=============================================================================#
 function(print_programmer_list)
     load_platform_settings()
-    foreach (PLATFORM ${${CMAKE_SYSTEM_PROCESSOR}_PLATFORMS})
-        if (${CMAKE_SYSTEM_PROCESSOR}_PROGRAMMERS)
-            message(STATUS "${CMAKE_SYSTEM_PROCESSOR} Programmers:")
-            print_list(${CMAKE_SYSTEM_PROCESSOR}_PROGRAMMERS)
-        endif ()
-        message(STATUS "")
-    endforeach ()
+    if (${CMAKE_SYSTEM_PROCESSOR}_PROGRAMMERS)
+        message(STATUS "${CMAKE_SYSTEM_PROCESSOR} Programmers:")
+        print_list(${CMAKE_SYSTEM_PROCESSOR}_PROGRAMMERS)
+    endif ()
+    message(NOTICE "")
 endfunction()
 #=============================================================================#
 # print_programmer_settings

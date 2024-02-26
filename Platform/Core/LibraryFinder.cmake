@@ -44,19 +44,33 @@ function(find_arduino_libraries VAR_NAME SRCS ARDLIBS)
     set(${VAR_NAME} "${FILTERED_LIBRARIES}" PARENT_SCOPE)
 endfunction()
 
+#=============================================================================#
+# find_arduino_libraries
+# [PRIVATE/INTERNAL]
+#
+# find_libs(VAR_NAME ARDLIBS)
+#
+#      VAR_NAME - Variable name which will hold the results
+#      ARDLIBS  - Arduino libraries identified by name (e.g., Wire, SPI, Servo)
+#
+#     returns a list of paths to libraries found.
+#
+#
+#=============================================================================#
 function(find_libs RET_LIBS_NAME ARDLIBS)
     set(RET_LIBS) # may called with same parent scope
     set(CMAKE_FIND_DEBUG_MODE TRUE)
 
-    # todo          V ??
     get_property(LIBRARY_SEARCH_PATH
             DIRECTORY     # Property Scope
-            PROPERTY LINK_DIRECTORIES)
+            PROPERTY LIBRARY_SEARCH_PATH)
     message(STATUS ${LIBRARY_SEARCH_PATH})
-
+    # TODO why it not work on first run
     foreach (LIB ${ARDLIBS})
         find_file(LIB_PATH
                 NAMES ${LIB}/src/${LIB}.h ${LIB}/${LIB}.h
+                HINTS ${CMAKE_SOURCE_DIR} ${LIBRARY_SEARCH_PATH}
+                PATHS ${ARDUINO_PLATFORM_LIBRARIES_PATH}
                 NO_CACHE
                 NO_CMAKE_ENVIRONMENT_PATH
                 NO_SYSTEM_ENVIRONMENT_PATH)
@@ -71,7 +85,21 @@ function(find_libs RET_LIBS_NAME ARDLIBS)
     set(${RET_LIBS_NAME} "${RET_LIBS}" PARENT_SCOPE)
 endfunction()
 
-
+#=============================================================================#
+# find_in_srcs
+# [PRIVATE/INTERNAL]
+#
+# find_arduino_libraries(VAR_NAME SRCS )
+#
+#      VAR_NAME - Variable name which will hold the results
+#      SRCS     - Sources that will be analyzed
+#
+#     returns a list of paths to libraries found.
+#
+#  Finds all Arduino type libraries included in sources. Available libraries
+#  are ${ARDUINO_SDK_PATH}/libraries .
+# TODO add in  ${CMAKE_CURRENT_SOURCE_DIR}
+#=============================================================================#
 function(find_in_srcs VAR_NAME SRC_LIST)
     if (SRC_LIST)
         if (CMAKE_HOST_UNIX)

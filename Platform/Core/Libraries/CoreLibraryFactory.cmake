@@ -44,16 +44,17 @@ function(make_core_library OUTPUT_VAR BOARD_ID)
 
             if (CMAKE_SYSTEM_PROCESSOR STREQUAL "stm32")
                 add_compile_definitions(ARDUINO_ARCH_STM32)
-                include_directories(${CMSIS_PATH}/Core/Include) #  TODO CMSIS setup
+                include_directories(${CMSIS_PATH}/Core/Include) #  TODO CMSIS
                 include_directories(
                         ${BOARD_CORE_PATH}/${CMAKE_SYSTEM_PROCESSOR}
                         ${BOARD_CORE_PATH}/${CMAKE_SYSTEM_PROCESSOR}/LL
                         ${BOARD_CORE_PATH}/${CMAKE_SYSTEM_PROCESSOR}/usb
                         ${BOARD_CORE_PATH}/${CMAKE_SYSTEM_PROCESSOR}/OpenAMP)
-            else ()
+            elseif (CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
                 add_compile_definitions(ARDUINO_ARCH_AVR)
                 add_compile_definitions(ARDUINO_ARCH_NANO) # TODO hack!!
-
+            else ()
+                # esp32
             endif ()
 
             if (BUILD_SERIES)

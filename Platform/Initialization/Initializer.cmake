@@ -36,37 +36,11 @@ if (NOT DEFINED ARDUINO_CXX_FLAGS)
     endif ()
 endif ()
 
-# Same as GNU-C set
-
-#set(CMAKE_CXX_FLAGS "-g -Os ${ARDUINO_CXX_FLAGS}" CACHE STRING "")
-#set(CMAKE_CXX_FLAGS_DEBUG "-g" CACHE STRING "")
-#set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG" CACHE STRING "")
-#set(CMAKE_CXX_FLAGS_RELEASE "-Os -DNDEBUG" CACHE STRING "")
-#set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-Os -g" CACHE STRING "")
-
 if (NOT DEFINED ARDUINO_LINKER_FLAGS)
-#    set(ARDUINO_LINKER_FLAGS "-nostdlib -lgcc -Wl,--gc-sections -lm ")
+    #    set(ARDUINO_LINKER_FLAGS "-nostdlib -lgcc -Wl,--gc-sections -lm ")
 endif ()
-#
-#set(CMAKE_EXE_LINKER_FLAGS "${ARDUINO_LINKER_FLAGS}" CACHE STRING "")
-#set(CMAKE_EXE_LINKER_FLAGS_DEBUG "" CACHE STRING "")
-#set(CMAKE_EXE_LINKER_FLAGS_MINSIZEREL "" CACHE STRING "")
-#set(CMAKE_EXE_LINKER_FLAGS_RELEASE "" CACHE STRING "")
-#set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "" CACHE STRING "")
-#
-#set(CMAKE_SHARED_LINKER_FLAGS "${ARDUINO_LINKER_FLAGS}" CACHE STRING "")
-#set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "" CACHE STRING "")
-#set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "" CACHE STRING "")
-#set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "" CACHE STRING "")
-#set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "" CACHE STRING "")
-#
-#set(CMAKE_MODULE_LINKER_FLAGS "${ARDUINO_LINKER_FLAGS}" CACHE STRING "")
-#set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "" CACHE STRING "")
-#set(CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL "" CACHE STRING "")
-#set(CMAKE_MODULE_LINKER_FLAGS_RELEASE "" CACHE STRING "")
-#set(CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO "" CACHE STRING "")
-
 SET(CMAKE_TRY_COMPILE_CONFIGURATION "Debug" CACHE STRING "")
+
 #todo  this may depend on PLATFORM
 set(${CMAKE_SYSTEM_PROCESSOR}_OBJCOPY_EEP_FLAGS -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load
         --no-change-warnings --change-section-lma .eeprom=0 CACHE STRING "")
@@ -80,27 +54,41 @@ include(FindPrograms)
 set(ARDUINO_LIBRARY_BLACKLIST "" CACHE STRING
         "A list of absolute paths to Arduino libraries that are meant to be ignored during library search")
 
-if (ARDUINO_IDE)
+if (ARDUINO_SDK_PATH)
     set(ARDUINO_CMAKE_RECURSION_DEFAULT True CACHE BOOL "Default Arduino lib recursion.")
     set(ARDUINO_DEFAULT_BOARD uno CACHE STRING "Default Arduino Board ID when not specified.")
     set(ARDUINO_DEFAULT_BOARD_CPU CACHE STRING "Default Arduino Board CPU when not specified.")
     set(ARDUINO_DEFAULT_PORT CACHE STRING "Default Arduino port when not specified.")
     set(ARDUINO_DEFAULT_SERIAL CACHE STRING "Default Arduino Serial command when not specified.")
     set(ARDUINO_DEFAULT_PROGRAMMER CACHE STRING "Default Arduino Programmer ID when not specified.")
-#    set(ARDUINO_CMAKE_RECURSION_DEFAULT FALSE CACHE BOOL "The default recursion behavior during library setup")
+    #    set(ARDUINO_CMAKE_RECURSION_DEFAULT FALSE CACHE BOOL "The default recursion behavior during library setup")
     # Ensure that all required paths are found
-    validate_variables_not_empty(VARS
-            avr_CORES_PATH
-            avr_BOOTLOADERS_PATH
-            avr_LIBRARIES_PATH
-            avr_BOARDS_PATH
-            avr_PROGRAMMERS_PATH
-            AVRSIZE_PROGRAM
-            avr_AVRDUDE_PROGRAM
-            avr_AVRDUDE_FLAGS
-            avr_AVRDUDE_CONFIG_PATH
-            ${ADDITIONAL_REQUIRED_VARS}
-            MSG "Invalid Arduino SDK path (${PLATFORM_PATH}).\n")
-endif ()
+    validate_variables_not_empty(
+            VARS ARDUINO_SDK_PATH
+            MSG "Invalid Arduino SDK path (${ARDUINO_SDK_PATH}).\n")
+    if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "avr")
+        validate_variables_not_empty(VARS
+                avr_CORES_PATH
+                avr_BOOTLOADERS_PATH
+                ARDUINO_PLATFORM_LIBRARIES_PATH
+                avr_LIBS_PATH
+                avr_BOARDS_PATH
+                avr_PROGRAMMERS_PATH
+                AVRSIZE_PROGRAM
+                avr_AVRDUDE_PROGRAM
+                avr_AVRDUDE_FLAGS
+                avr_AVRDUDE_CONFIG_PATH
+                MSG "Invalid Arduino SDK path (${PLATFORM_PATH}).\n"
+                )
+    else ()
+        validate_variables_not_empty(VARS
+                ${CMAKE_SYSTEM_PROCESSOR}_CORES_PATH
+                ${CMAKE_SYSTEM_PROCESSOR}_BOOTLOADERS_PATH
 
-set(ARDUINO_FOUND True CACHE INTERNAL "Arduino Found") #TODO ??
+                ${CMAKE_SYSTEM_PROCESSOR}_LIBS_PATH
+                ${CMAKE_SYSTEM_PROCESSOR}_BOARDS_PATH
+                ${CMAKE_SYSTEM_PROCESSOR}_PROGRAMMERS_PATH
+                MSG "Invalid PLATFORM path (${PLATFORM_PATH}).\n"
+                )
+    endif ()
+endif ()

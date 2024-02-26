@@ -8,8 +8,6 @@ if (CUSTOM_PLATFORM_REGISTRATION_SCRIPT)
     return()
 endif ()
 
-
-
 set(HINTS
         ${ARDUINO_SDK_PATH}/hardware/${PLATFORM}/${CMAKE_SYSTEM_PROCESSOR}
         ${PLATFORM_PATH}/*
@@ -51,7 +49,7 @@ find_file(${CMAKE_SYSTEM_PROCESSOR}_PLATFORM_FILE_PATH
         DOC "Path to Arduino platform definition file.")
 
 # some libraries are in platform path in versions 1.5 and greater
-if (ARDUINO_SDK_VERSION VERSION_GREATER 1.0.5) # FOR non arduino LIBS & LIBRARIES is SAME
+if (ARDUINO_SDK_VERSION VERSION_GREATER 1.0.5 AND ARDUINO_SDK_PATH) # FOR non arduino LIBS & LIBRARIES is SAME
     find_file(ARDUINO_PLATFORM_LIBRARIES_PATH
             NAMES libraries
             PATHS ${ARDUINO_SDK_PATH}

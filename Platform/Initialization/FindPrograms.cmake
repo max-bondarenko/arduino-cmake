@@ -1,16 +1,4 @@
-if (ARDUINO_IDE)
-    find_file(${CMAKE_SYSTEM_PROCESSOR}_EXAMPLES_PATH
-            NAMES examples
-            PATHS ${PLATFORM_PATH}
-            DOC "Path to directory containg the Arduino built-in examples."
-            NO_DEFAULT_PATH)
-
-    find_file(${CMAKE_SYSTEM_PROCESSOR}_LIBRARIES_PATH
-            NAMES libraries
-            PATHS ${PLATFORM_PATH}
-            DOC "Path to directory containing the Arduino libraries."
-            NO_DEFAULT_PATH)
-
+if (ARDUINO_SDK_PATH)
     find_program(${CMAKE_SYSTEM_PROCESSOR}_AVRDUDE_PROGRAM
             NAMES avrdude
             PATHS ${PLATFORM_PATH}

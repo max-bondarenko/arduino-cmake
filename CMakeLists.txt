@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.8)
 
 file(GLOB_RECURSE SRCS_HELLO test-lib/*)
 
-SET(PLATFORM_PATH $ENV{HOME}/.platformio/packages/framework-arduinoststm32)
-SET(TOOLCHAIN_PATH "$ENV{HOME}/.platformio/packages/toolchain-gccarmnoneeabi")
+#SET(PLATFORM_PATH $ENV{HOME}/.platformio/packages/framework-arduinoststm32)
+#SET(TOOLCHAIN_PATH "$ENV{HOME}/.platformio/packages/toolchain-gccarmnoneeabi")
 
 project(test-cmake C CXX)
 
@@ -23,11 +23,11 @@ set(CMAKE_CXX_STANDARD 11)
 #        PORT /dev/ttyACM0
 #        )
 # todo done stm
-set(BOARD_CPU GENERIC_F103CBTX)
-make_core_library(ASD "GenF1.GENERIC_F103CBTX")
+#set(BOARD_CPU GENERIC_F103CBTX)
+#make_core_library(ASD "GenF1.GENERIC_F103CBTX")
 # todo  avr
-#set(BOARD_CPU atmega168)
-#make_core_library(ASD "nano.atmega168")
+set(BOARD_CPU atmega168)
+make_core_library(ASD "nano.atmega168")
 
 
 # TODO use CMakeDependentOption !

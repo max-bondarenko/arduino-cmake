@@ -41,7 +41,7 @@ function(generate_arduino_firmware INPUT_NAME)
         make_core_library(CORE_LIB ${BOARD_ID})
     endif ()
 
-    if (NOT "${INPUT_SKETCH}" STREQUAL "")
+    if (NOT ${INPUT_SKETCH})
         get_filename_component(INPUT_SKETCH "${INPUT_SKETCH}" ABSOLUTE)
         make_arduino_sketch(${INPUT_NAME} ${INPUT_SKETCH} ALL_SRCS)
         if (IS_DIRECTORY "${INPUT_SKETCH}")

@@ -35,7 +35,7 @@ endmacro()
 if (NOT DEFINED ARDUINO_SDK_VERSION)
     find_file(ARDUINO_VERSION_PATH
             NAMES lib/version.txt
-            PATHS ${PLATFORM_PATH}
+            PATHS ${ARDUINO_SDK_PATH}
             DOC "Path to Arduino version file.")
 
     find_file(ARDUINO_REVISION_PATH

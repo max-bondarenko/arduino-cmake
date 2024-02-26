@@ -126,10 +126,12 @@ function(set_board_flags TARGET_NAME BOARD_ID IS_MANUAL)
         if (CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
             _get_board_property(${BOARD_ID} build.f_cpu FCPU)
             _get_board_property(${BOARD_ID} build.mcu MCU)
+
             list(APPEND flags F_CPU=${FCPU})
             list(APPEND flags mmcu=${MCU})
+            list(APPEND flags ARDUINO_${BOARD})
         elseif (CMAKE_SYSTEM_PROCESSOR STREQUAL "stm32")
-#                                                TODO check -v- put it for test
+            #                                         TODO check -v- put it for test
             _try_get_board_property(${BOARD_ID} menu.cpu.${BOARD_CPU}.build.flags TRY_CPU_FLAGS)
             if (TRY_CPU_FLAGS)
                 list(APPEND flags ${TRY_CPU_FLAGS})
@@ -143,9 +145,9 @@ function(set_board_flags TARGET_NAME BOARD_ID IS_MANUAL)
             # dont set the mcu speed, it is done elsewhere
             # set(COMPILE_FLAGS "-DF_CPU=${FCPU} ${CPU_FLAGS} -D")
 
-            add_if_defined(build.vect )
-            add_if_defined(build.series )
-            add_if_defined(menu.cpu.${ARDUINO_UPLOAD_METHOD}Method.build.vect )
+            add_if_defined(build.vect)
+            add_if_defined(build.series)
+            add_if_defined(menu.cpu.${ARDUINO_UPLOAD_METHOD}Method.build.vect)
 
             # upload flags if any
             add_if_defined(menu.cpu.${ARDUINO_UPLOAD_METHOD}Method.build.upload_flags)
@@ -158,12 +160,10 @@ function(set_board_flags TARGET_NAME BOARD_ID IS_MANUAL)
             add_to_compile_flags(build.error_led_port "ERROR_LED_PORT=")
             add_to_compile_flags(build.error_led_pin "ERROR_LED_PIN=")
             #            add_to_compile_flags(build.board "ARDUINO_") # TODO !!
-#            add_to_compile_flags(build.variant "BOARD_")# TODO !!
+            #            add_to_compile_flags(build.variant "BOARD_")# TODO !!
         endif ()
         target_compile_definitions(${TARGET_NAME}
-                PUBLIC ARDUINO=${NORMALIZED_SDK_VERSION}
                 PUBLIC ${flags}
-                PUBLIC ARDUINO_${BOARD_CPU}
                 )
 
         #        set_board_linker_flags(LINK_FLAGS ${BOARD_ID} ${IS_MANUAL})

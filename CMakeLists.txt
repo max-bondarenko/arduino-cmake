@@ -3,27 +3,34 @@ cmake_minimum_required(VERSION 3.8)
 
 file(GLOB_RECURSE SRCS_HELLO test-lib/*)
 
-SET(PLATFORM_PATH $ENV{HOME}/.platformio/packages/framework-arduinoststm32)
-SET(TOOLCHAIN_PATH "$ENV{HOME}/.platformio/packages/toolchain-gccarmnoneeabi")
+#SET(PLATFORM_PATH $ENV{HOME}/.platformio/packages/framework-arduinoststm32)
+#SET(TOOLCHAIN_PATH "$ENV{HOME}/.platformio/packages/toolchain-gccarmnoneeabi")
 
 project(test-cmake C CXX)
 
 SET(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 11)
 
-#print_board_list()
-#print_board_settings(Nucleo_144)
-#print_programmer_list()
-#
+#print_board_list() # todo done
+#print_board_settings(Nucleo_144) todo done
+#print_board_settings(nano) # todo done
+#print_programmer_list() todo done
+
 #generate_arduino_firmware(hello
 #        SRCS ${SRCS_HELLO}
 #        BOARD GenF1
 #        BOARD_CPU BLUEPILL_F103C6
 #        PORT /dev/ttyACM0
 #        )
-set(BOARD_CPU GENERIC_F103CBTX)
-make_core_library(ASD "GenF1.GENERIC_F103CBTX")
+# todo done stm
+#set(BOARD_CPU GENERIC_F103CBTX)
+#make_core_library(ASD "GenF1.GENERIC_F103CBTX")
+set(BOARD_CPU atmega168)
+make_core_library(ASD "nano.atmega168")
 
+
+# TODO set standarts CMAKE_C_STANDARD!!
+# todo  MCPU set
 # TODO add arduino-* as independent part. some libs are in arduino not in stm32
 # todo : use CMAKE_LIBRARY_PATH in all libs
 # TODO LINK flags
@@ -40,14 +47,14 @@ set(ARDUINO_DEBUG TRUE)
 
 #make_arduino_library (lib_name "GenF1.GENERIC_F103CBTX" ${lib_EEPROM-src} "-DA" "-lg")
 
-# done
+# TODO done
 #generate_library(test_lib
 #        BOARD GenF1.GENERIC_F103CBTX
 #        BOARD_CPU GENERIC_F103CBTX
 #        SRCS ${test_LIB_SRC}
 #        )
 
-## done
+## TODO done
 #generate_library(test_lib
 #        BOARD GenF1.GENERIC_F103CBTX
 #        BOARD_CPU GENERIC_F103CBTX

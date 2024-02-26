@@ -66,12 +66,13 @@ if (NOT DEFINED PLATFORM_PATH)
             HINTS ${SDK_PATH_HINTS})
 
     if (EXISTS ${PATH})
-        set(ARDUINO_IDE TRUE CACHE BOOL "we work with Arduino Default IDE")
-        set(PLATFORM_PATH ${PATH} CACHE PATH "Arduino SDK base directory")
-        set(PLATFORM_TOOLCHAIN_PATH ${PATH}/hardware/tools CACHE PATH "Arduino SDK base directory")
-
         set(CMAKE_C_COMPILER_ID "GNU" CACHE INTERNAL "")
         set(CMAKE_SYSTEM_PROCESSOR "avr" CACHE INTERNAL "")
+
+        set(ARDUINO_IDE TRUE CACHE BOOL "we work with Arduino Default IDE")
+        set(ARDUINO_SDK_PATH ${PATH} CACHE PATH "Arduino SDK base directory")
+        set(PLATFORM_PATH ${PATH}/hardware/${PLATFORM}/${CMAKE_SYSTEM_PROCESSOR} CACHE PATH "Arduino platform path")
+        set(PLATFORM_TOOLCHAIN_PATH ${PATH}/hardware/tools CACHE PATH "Arduino SDK base directory")
 
         set(CMAKE_C_COMPILER_HINTS ${PLATFORM_TOOLCHAIN_PATH}/avr)
         list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${PLATFORM_TOOLCHAIN_PATH}/avr)

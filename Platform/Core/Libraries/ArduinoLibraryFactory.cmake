@@ -18,11 +18,9 @@
 #=============================================================================#
 function(make_arduino_library VAR_NAME BOARD_ID LIB_PATH COMPILE_FLAGS LINK_FLAGS)
 
-    string(REGEX REPLACE "/src[/]?" "" LIB_PATH_STRIPPED ${LIB_PATH})
+    string(REGEX REPLACE "/src[/]?$" "" LIB_PATH_STRIPPED ${LIB_PATH})
     get_filename_component(LIB_NAME ${LIB_PATH_STRIPPED} NAME)
     set(TARGET_LIB_NAME ${BOARD_ID}_${LIB_NAME})
-
-#    string(REGEX REPLACE ".*/" "" LIB_SHORT_NAME ${LIB_NAME})
 
     # Detect if recursion is needed
     if (NOT DEFINED ${LIB_NAME}_RECURSE)
@@ -31,23 +29,20 @@ function(make_arduino_library VAR_NAME BOARD_ID LIB_PATH COMPILE_FLAGS LINK_FLAG
 
     # As make_arduino_library is called recursively, LIB_SRCS and LIB_HDRS
     # might be defined in parent scope and must therefore be cleared.
-    #
     set(LIB_SRCS)
     set(LIB_HDRS)
 
-    find_sources(LIB_SRCS ${LIB_PATH} ${${LIB_NAME}_RECURSE})
-    find_headers(LIB_HDRS ${LIB_PATH} ${${LIB_NAME}_RECURSE})
+    find_sources(LIB_SRCS ${LIB_PATH} TRUE)
+    find_headers(LIB_HDRS ${LIB_PATH} FALSE)
 
     if (LIB_SRCS)
-
         if (NOT TARGET ${TARGET_LIB_NAME})
-
             arduino_debug_msg("Generating Arduino ${LIB_NAME} library")
             add_library(${TARGET_LIB_NAME} STATIC ${LIB_SRCS})
 
-            set_board_flags(ARDUINO_COMPILE_FLAGS ARDUINO_LINK_FLAGS ${BOARD_ID} FALSE)
+            set_board_flags(${TARGET_LIB_NAME} ${BOARD_ID} FALSE)
 
-            find_arduino_libraries(LIB_DEPS "${LIB_SRCS};${LIB_HDRS}" "")
+#            find_arduino_libraries(LIB_DEPS "${LIB_SRCS};${LIB_HDRS}" "")
 
             foreach (LIB_DEP ${LIB_DEPS})
                 make_arduino_library(DEP_LIB_SRCS ${BOARD_ID} ${LIB_DEP}
@@ -85,7 +80,7 @@ function(make_arduino_library VAR_NAME BOARD_ID LIB_PATH COMPILE_FLAGS LINK_FLAG
         # Target not build due to lack of sources. However, the library might contain
         # headers.
         #
-        list(APPEND LIB_INCLUDES "-I\"${LIB_PATH}\"")
+        list(APPEND LIB_INCLUDES "${LIB_PATH}")
     endif ()
 
     if (LIB_TARGETS)

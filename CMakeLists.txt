@@ -24,6 +24,39 @@ set(CMAKE_CXX_STANDARD 11)
 set(BOARD_CPU GENERIC_F103CBTX)
 make_core_library(ASD "GenF1.GENERIC_F103CBTX")
 
+# TODO add arduino-* as independent part. some libs are in arduino not in stm32
+# todo : use CMAKE_LIBRARY_PATH in all libs
+# TODO LINK flags
+#  TODO CMSIS setup
+
+set(test_LIB_SRC test-lib/for_lib_test.cpp test-lib/for_lib_test2.cpp)
+#find_arduino_libraries(FOUND_LIBS ${test_LIB_SRC} "")
+set(lib_name)
+set(C_FLAGS)
+set(L_FLAGS)
+set(ARDUINO_DEBUG TRUE)
+#find_arduino_libraries(lib_WIRE-src ${test_LIB_SRC} "Wire")
+#find_arduino_libraries(lib_EEPROM-src ${test_LIB_SRC} "EEPROM")
+
+#make_arduino_library (lib_name "GenF1.GENERIC_F103CBTX" ${lib_EEPROM-src} "-DA" "-lg")
+
+# done
+#generate_library(test_lib
+#        BOARD GenF1.GENERIC_F103CBTX
+#        BOARD_CPU GENERIC_F103CBTX
+#        SRCS ${test_LIB_SRC}
+#        )
+
+## done
+#generate_library(test_lib
+#        BOARD GenF1.GENERIC_F103CBTX
+#        BOARD_CPU GENERIC_F103CBTX
+#        SRCS ${test_LIB_SRC}
+#        LIBS EEPROM Wire
+#        NO_AUTOLIBS
+#        )
+
+
 #make_arduino_example(blink "Blink" ALL_SRCS "Basics" )
 #make_arduino_sketch(blink "/opt/arduino-1.8.19/examples/01.Basics/Blink" SKETCH_CPP )
 #generate_arduino_example(blink

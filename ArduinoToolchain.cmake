@@ -112,13 +112,16 @@ else ()
                 PATHS ${PLATFORM_PATH}/.. ${PLATFORM_PATH}/../*
                 PATH_SUFFIXES framework-*
                 )
-
+#        set(CMAKE_FIND_DEBUG_MODE TRUE)
         get_filename_component(PATH ${PLATFORM_TOOLCHAIN_GCC} DIRECTORY)
         get_filename_component(PATH ${PATH} DIRECTORY)
 
         if (EXISTS ${PATH})
+
+#            list(APPEND CMAKE_LIBRARY_PATH ${PLATFORM_PATH}) # for lib.a search
+            set(CMAKE_INCLUDE_PATH ${PLATFORM_PATH}/libraries CACHE INTERNAL "")
             set(PLATFORM_TOOLCHAIN_PATH ${PATH} CACHE PATH "" FORCE)
-            set(CMAKE_C_COMPILER_HINTS ${PLATFORM_TOOLCHAIN_PATH})
+            set(CMAKE_C_COMPILER_HINTS ${PLATFORM_TOOLCHAIN_PATH}) # TODO ?
             list(APPEND CMAKE_SYSTEM_PREFIX_PATH "${PLATFORM_TOOLCHAIN_PATH}")
         endif ()
 
@@ -126,6 +129,9 @@ else ()
         set(ARDUINO_SDK_VERSION "1.8.6" CACHE STRING "Arduino SDK Version") # todo workaround
     endif ()
 endif ()
+
+set(CMAKE_LIBRARY_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
+set(CMAKE_EXECUTE_PROCESS_COMMAND_ECHO STDOUT CACHE INTERNAL "")
 
 if (NOT DEFINED PLATFORM_TOOLCHAIN_PATH)
     fatal_banner("NO platform specified")

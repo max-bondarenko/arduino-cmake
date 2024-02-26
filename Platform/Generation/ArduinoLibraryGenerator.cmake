@@ -1,24 +1,38 @@
 #=============================================================================#
-# generate_arduino_library
+# generate_library
 # [PUBLIC/USER]
-# see documentation at README
+#       Generate user libraryr from sources
+#
+#
+#   BOARD - board id
+#   BOARD_CPU - board cpu id
+#   SRCS <..> - lib sources list
+#   HDRS <..> - lib headers list
+#   [NO_AUTOLIBS] - do not parse sources for Arduino SDK library includes
+#   [LIBS] <..> - Arduino SDK lib names if NO_AUTOLIBS provided
+#
 #=============================================================================#
-function(generate_arduino_library INPUT_NAME)
+function(generate_library INPUT_NAME)
     message(STATUS "Generating Library ${INPUT_NAME}")
     parse_generator_arguments(${INPUT_NAME} INPUT
-            "NO_AUTOLIBS;MANUAL"                  # Options
+            "NO_AUTOLIBS"                         # Options
             "BOARD;BOARD_CPU"                     # One Value Keywords
             "SRCS;HDRS;LIBS"                      # Multi Value Keywords
             ${ARGN})
 
-#    if (NOT INPUT_BOARD)
-#        set(INPUT_BOARD ${ARDUINO_DEFAULT_BOARD})
-#    endif ()
-#    if (NOT INPUT_BOARD_CPU AND ARDUINO_DEFAULT_BOARD_CPU)
-#        set(INPUT_BOARD_CPU ${ARDUINO_DEFAULT_BOARD_CPU})
-#    endif ()
-    if (NOT INPUT_MANUAL)
-        set(INPUT_MANUAL FALSE)
+    if (NOT INPUT_BOARD)
+        set(INPUT_BOARD ${ARDUINO_DEFAULT_BOARD})
+    endif ()
+    if (NOT INPUT_BOARD_CPU AND ARDUINO_DEFAULT_BOARD_CPU)
+        set(INPUT_BOARD_CPU ${ARDUINO_DEFAULT_BOARD_CPU})
+    endif ()
+
+    if (NOT INPUT_NO_AUTOLIBS)
+        set(INPUT_NO_AUTOLIBS FALSE)
+    else ()
+        if (NOT INPUT_LIBS)
+            message(FATAL_ERROR "No lib names specified with LIBS: ${LIBS}")
+        endif ()
     endif ()
     validate_variables_not_empty(VARS INPUT_SRCS INPUT_BOARD MSG "must define for target ${INPUT_NAME}")
 
@@ -27,8 +41,12 @@ function(generate_arduino_library INPUT_NAME)
     set(ALL_LIBS)
     set(ALL_SRCS ${INPUT_SRCS} ${INPUT_HDRS})
 
-    find_arduino_libraries(TARGET_LIBS "${ALL_SRCS}" )
-    message(SEND_ERROR)
+    if (INPUT_NO_AUTOLIBS)
+        find_arduino_libraries(TARGET_LIBS "" "${INPUT_LIBS}")
+    else ()
+        find_arduino_libraries(TARGET_LIBS "${ALL_SRCS}" "")
+    endif ()
+
     set(LIB_DEP_INCLUDES)
     foreach (LIB_DEP ${TARGET_LIBS})
         list(APPEND LIB_DEP_INCLUDES ${LIB_DEP})
@@ -38,10 +56,6 @@ function(generate_arduino_library INPUT_NAME)
 
     add_library(${INPUT_NAME} ${ALL_SRCS})
 
-    set_board_flags(ARDUINO_COMPILE_FLAGS ARDUINO_LINK_FLAGS ${BOARD_ID} ${INPUT_MANUAL})
 
-    separate_arguments(my_ARDUINO_COMPILE_FLAGS UNIX_COMMAND "${ARDUINO_COMPILE_FLAGS}")
-    target_compile_options(${INPUT_NAME} PRIVATE ${my_ARDUINO_COMPILE_FLAGS})
-    target_compile_options(${INPUT_NAME} PRIVATE ${COMPILE_FLAGS})
     target_include_directories(${INPUT_NAME} PUBLIC ${LIB_DEP_INCLUDES})
 endfunction()

@@ -79,6 +79,7 @@ function(_check_path_exists_case_sensitive_brute_force result_var_ absolute_path
 endfunction()
 
 #=============================================================================#
+# DEPRECATED
 # _check_path_exists_case_sensitive
 # [PRIVATE/INTERNAL]
 #

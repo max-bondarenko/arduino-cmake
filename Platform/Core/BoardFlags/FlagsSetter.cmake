@@ -160,7 +160,7 @@ function(set_board_flags TARGET_NAME BOARD_ID IS_MANUAL)
             #            add_to_compile_flags(build.board "ARDUINO_") # TODO !!
 #            add_to_compile_flags(build.variant "BOARD_")# TODO !!
         endif ()
-        target_compile_definitions(${CORE_LIB_NAME}
+        target_compile_definitions(${TARGET_NAME}
                 PUBLIC ARDUINO=${NORMALIZED_SDK_VERSION}
                 PUBLIC ${flags}
                 PUBLIC ARDUINO_${BOARD_CPU}

@@ -54,7 +54,7 @@ include(AvrFirmwareGenerator)
 include(ArduinoLibraryGenerator)
 include(ArduinoFirmwareGenerator)
 include(ArduinoExampleGenerator)
-include(ArduinoLibraryExampleGenerator)
+
 
 # Define the 'RECURSE' flag for libraries known to depend on it
 set(Wire_RECURSE True)

@@ -1,7 +1,15 @@
 #=============================================================================#
 # generate_arduino_example
 # [PUBLIC/USER]
-# see documentation at README
+#    CATEGORY      Optional name of the example's parent category, such as 'Basics' is for 'Blink'.
+#    EXAMPLE
+#    [PORT]
+#    [PROGRAMMER]
+#    BOARD - board id
+#    BOARD_CPU - board cpu id
+#    [NO_AUTOLIBS] - do not parse sources for Arduino SDK library includes
+#    [LIBS] <..> - Arduino SDK lib names if NO_AUTOLIBS provided
+
 #=============================================================================#
 function(generate_arduino_example INPUT_NAME)
     parse_generator_arguments(${INPUT_NAME} INPUT
@@ -52,7 +60,7 @@ function(generate_arduino_example INPUT_NAME)
     list(APPEND ALL_LIBS ${CORE_LIB} ${INPUT_LIBS})
 
     create_arduino_firmware_target(${INPUT_NAME} ${BOARD_ID} "${ALL_SRCS}" "${ALL_LIBS}" "${LIB_DEP_INCLUDES}" "" FALSE)
-
+            message(FATAL_ERROR ${})
     if (INPUT_PORT)
         create_arduino_upload_target(${BOARD_ID} ${INPUT_NAME} ${INPUT_PORT} "${INPUT_PROGRAMMER}" "${INPUT_AFLAGS}")
     endif ()

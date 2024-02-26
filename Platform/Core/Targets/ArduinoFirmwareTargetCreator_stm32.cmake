@@ -17,7 +17,7 @@
 #=============================================================================#
 
 macro(DBG)
-    message (STATUS ${ARGN})
+    message(STATUS ${ARGN})
 endmacro(DBG)
 
 function(create_arduino_firmware_target TARGET_NAME BOARD_ID ALL_SRCS ALL_LIBS
@@ -39,9 +39,9 @@ function(create_arduino_firmware_target TARGET_NAME BOARD_ID ALL_SRCS ALL_LIBS
         #endforeach (w ${WIRISH})
         #message (STATUS "${wirish_files}")
         #Order is important
-        foreach (src start.S start_c.c syscalls.c ../board.cpp boards.cpp boards_setup.cpp)
-            set(wirish_files ${wirish_files} ${RUNTIME_FILES_PATH}/wirish/${src})
-        endforeach (src boards.cpp boards_setup.cpp start_c.c start.S syscalls.c)
+        #        foreach (src start.S start_c.c syscalls.c ../board.cpp boards.cpp boards_setup.cpp)
+        #            set(wirish_files ${wirish_files} ${RUNTIME_FILES_PATH}/wirish/${src})
+        #        endforeach (src boards.cpp boards_setup.cpp start_c.c start.S syscalls.c)
         message(STATUS "${wirish_files}")
 
         #get_cmake_property(_variableNames VARIABLES)
@@ -79,15 +79,17 @@ function(create_arduino_firmware_target TARGET_NAME BOARD_ID ALL_SRCS ALL_LIBS
     set(MAP_OPT "-Wl,-Map,${TARGET_NAME}.map")
 
     #
-    set_board_flags(ARDUINO_COMPILE_FLAGS ARDUINO_LINK_FLAGS ${BOARD_ID} ${MANUAL})
+    set_board_flags(${TARGET_NAME} ${BOARD_ID} ${MANUAL})
 
     # Add ld script
     message(STATUS "ARDUINO_LINK_FLAGS ${ARDUINO_LINK_FLAGS},  LINK_FLAGS: ${LINK_FLAGS}")
-    set_target_properties(${TARGET_NAME} PROPERTIES
-            COMPILE_FLAGS "${ARDUINO_COMPILE_FLAGS} ${COMPILE_FLAGS}"
-            LINK_FLAGS "${ARDUINO_LINK_FLAGS} ${BOOTLOADER_LINK_OPT} ${LINK_FLAGS} ${MAP_OPT} ${LINK_FLAGS}")
+    #todo
+    #    set_target_properties(${TARGET_NAME} PROPERTIES
+    #            COMPILE_FLAGS "${ARDUINO_COMPILE_FLAGS} ${COMPILE_FLAGS}"
+    #            LINK_FLAGS "${ARDUINO_LINK_FLAGS} ${BOOTLOADER_LINK_OPT} ${LINK_FLAGS} ${MAP_OPT} ${LINK_FLAGS}")
 
     list(REMOVE_DUPLICATES ALL_LIBS)
+    message(FATAL_ERROR ${CMAKE_GENERATE_SHARED_LIBRARIES})
     if (ARDUINO_CMAKE_GENERATE_SHARED_LIBRARIES)
         # When building a shared library we must make sure that
         # all symbols from the intermediate static libraries end up in the

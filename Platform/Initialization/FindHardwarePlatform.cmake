@@ -56,6 +56,12 @@ if (ARDUINO_SDK_VERSION VERSION_GREATER 1.0.5 AND ARDUINO_SDK_PATH) # FOR non ar
             REQUIRED
             DOC "Path to platform directory containing the Arduino libraries.")
 
+    find_file(ARDUINO_EXAMPLES_PATH
+            NAMES examples
+            PATHS ${ARDUINO_SDK_PATH}
+            REQUIRED
+            DOC "Path to platform directory containing the Arduino examples.")
+
     if (${ARDUINO_PLATFORM_LIBRARIES_PATH} STREQUAL ${${CMAKE_SYSTEM_PROCESSOR}_LIBS_PATH})
         unset(ARDUINO_PLATFORM_LIBRARIES_PATH CACHE)
     endif ()

@@ -22,7 +22,7 @@ function(make_arduino_example TARGET_NAME EXAMPLE_NAME OUTPUT_VAR)
     string(TOLOWER ${EXAMPLE_NAME} EXAMPLE_NAME)
 
     if (CATEGORY_NAME)
-        if (EXISTS "${${CMAKE_SYSTEM_PROCESSOR}_EXAMPLES_PATH}" AND NOT ${CMAKE_SYSTEM_PROCESSOR}_EXAMPLE_CATEGORIES)
+        if (EXISTS "${ARDUINO_EXAMPLES_PATH}" AND NOT ${CMAKE_SYSTEM_PROCESSOR}_EXAMPLE_CATEGORIES)
             include(SetupExampleCategories)
         endif ()
         string(TOLOWER ${CATEGORY_NAME} LOWER_CATEGORY_NAME)
@@ -32,14 +32,15 @@ function(make_arduino_example TARGET_NAME EXAMPLE_NAME OUTPUT_VAR)
             return()
         endif ()
         increment_example_category_index(CATEGORY_INDEX)
+        # TODO work only with ARDUINO SDK
         set(CATEGORY_NAME ${CATEGORY_INDEX}.${CATEGORY_NAME})
-        file(GLOB EXAMPLES RELATIVE ${${CMAKE_SYSTEM_PROCESSOR}_EXAMPLES_PATH}/${CATEGORY_NAME}
-                ${${CMAKE_SYSTEM_PROCESSOR}_EXAMPLES_PATH}/${CATEGORY_NAME}/*)
+        file(GLOB EXAMPLES RELATIVE ${ARDUINO_EXAMPLES_PATH}/${CATEGORY_NAME}
+                ${ARDUINO_EXAMPLES_PATH}/${CATEGORY_NAME}/*)
         foreach (EXAMPLE_PATH ${EXAMPLES})
             string(TOLOWER ${EXAMPLE_PATH} LOWER_EXAMPLE_PATH)
             if (${LOWER_EXAMPLE_PATH} STREQUAL ${EXAMPLE_NAME})
                 set(EXAMPLE_SKETCH_PATH
-                        "${${CMAKE_SYSTEM_PROCESSOR}_EXAMPLES_PATH}/${CATEGORY_NAME}/${EXAMPLE_PATH}")
+                        "${ARDUINO_EXAMPLES_PATH}/${CATEGORY_NAME}/${EXAMPLE_PATH}")
                 break()
             endif ()
         endforeach ()

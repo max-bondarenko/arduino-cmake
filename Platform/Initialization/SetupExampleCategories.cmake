@@ -1,8 +1,8 @@
 # Setups all of Arduino's built-in examples categories, listing it by their names
 # without the index prefix ('01.Basics' becomes 'Basics').
 
-file(GLOB EXAMPLE_CATEGORIES RELATIVE ${${CMAKE_SYSTEM_PROCESSOR}_EXAMPLES_PATH}
-        ${${CMAKE_SYSTEM_PROCESSOR}_EXAMPLES_PATH}/*)
+file(GLOB EXAMPLE_CATEGORIES RELATIVE ${ARDUINO_EXAMPLES_PATH}
+        ${ARDUINO_EXAMPLES_PATH}/*)
 list(SORT EXAMPLE_CATEGORIES)
 
 foreach (CATEGORY ${EXAMPLE_CATEGORIES})

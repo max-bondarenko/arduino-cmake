@@ -30,6 +30,7 @@ make_core_library(ASD "GenF1.GENERIC_F103CBTX")
 #make_core_library(ASD "nano.atmega168")
 
 
+# TODO use CMakeDependentOption !
 # TODO set standarts CMAKE_C_STANDARD!!
 # todo  MCPU set for stm32
 # TODO done add arduino-* as independent part. some libs are in arduino not in stm32
@@ -44,12 +45,18 @@ set(C_FLAGS)
 set(L_FLAGS)
 set(ARDUINO_DEBUG TRUE)
 
+# Possible choice for STM32
+#  BMP    : BlackMagic
+#  STLink : ST link v2
+#  DFUUpload: Arduino
+#
+# that changes the way the binary is linked, better to use DFU in all cases !
+
+#
+##
 ##set(ARDUINO_DEFAULT_BOARD GenF1) # Default Board ID, when not specified
 #set(ARDUINO_DEFAULT_PORT  ttyACM0) # Default Port, when not specified
 
-
-#find_arduino_libraries(lib_WIRE-src ${test_LIB_SRC} "Wire")
-#find_arduino_libraries(lib_EEPROM-src ${test_LIB_SRC} "EEPROM")
 
 #make_arduino_library (lib_name "GenF1.GENERIC_F103CBTX" ${lib_EEPROM-src} "-DA" "-lg")
 
@@ -76,6 +83,19 @@ set(ARDUINO_DEBUG TRUE)
 #        DIR test-lib/printfloat
 #        NO_AUTOLIBS
 #        )
+
+# TODO done
+#make_arduino_example(blink "Blink" ALL_SRCS "Basics" )
+# TODO done
+
+# TODO ArduinoFirmwareTargetCreator_stm32.cmake
+#generate_arduino_example(blink
+#        EXAMPLE "Blink"
+#        CATEGORY "Basics"
+#        BOARD GenF1.GENERIC_F103CBTX
+#        BOARD_CPU GENERIC_F103CBTX
+#        )
+#make_arduino_sketch(blink "/opt/arduino-1.8.19/examples/01.Basics/Blink" SKETCH_CPP )
 
 
 # reference

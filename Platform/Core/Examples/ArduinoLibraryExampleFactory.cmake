@@ -12,6 +12,7 @@
 # Creates a Arduino example from the specified library.
 #=============================================================================#
 function(make_arduino_library_example TARGET_NAME LIBRARY_NAME EXAMPLE_NAME OUTPUT_VAR)
+    message(FATAL_ERROR "NOT IMPLEMENTED") # TODO
     set(EXAMPLE_SKETCH_PATH)
 
     get_property(LIBRARY_SEARCH_PATH

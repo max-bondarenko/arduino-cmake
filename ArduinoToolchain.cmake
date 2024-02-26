@@ -104,6 +104,15 @@ else ()
                 DOC "stm32 g++"
                 REQUIRED
                 )
+
+#       set(CMAKE_FIND_DEBUG_MODE TRUE)
+        # TODO temporary huck
+        find_file(CMSIS_PATH
+                NAMES cmsis CMSIS
+                PATHS ${PLATFORM_PATH}/.. ${PLATFORM_PATH}/../*
+                PATH_SUFFIXES framework-*
+                )
+
         get_filename_component(PATH ${PLATFORM_TOOLCHAIN_GCC} DIRECTORY)
         get_filename_component(PATH ${PATH} DIRECTORY)
 

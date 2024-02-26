@@ -7,11 +7,18 @@
 #        VAR_NAME - Variable name that will hold the detected sources
 #        LIB_PATH - The base path
 #        RECURSE  - Whether or not to recurse
+#       EXCLUDE_PATTERN - obviouse
 #
 # Finds all C/C++ sources located at the specified path.
 #
 #=============================================================================#
-function(find_sources VAR_NAME LIB_PATH RECURSE)
+function(find_sources VAR_NAME LIB_PATH RECURSE )
+#    set(OPTIONAL_ARGUMENTS ${ARGN})
+#    list(LENGTH OPTIONAL_ARGUMENTS ARGC)
+#    if (${ARGC} GREATER 0)
+#        list(GET OPTIONAL_ARGUMENTS 0 EXCLUDE_PATTERN)
+#    endif ()
+
     set(FILE_SEARCH_LIST
             ${LIB_PATH}/*.cpp
             ${LIB_PATH}/*.c
@@ -28,7 +35,7 @@ function(find_sources VAR_NAME LIB_PATH RECURSE)
 
     # MEANX filter out examples and extra
     foreach (file ${SOURCE_FILES})
-        if ((${file} MATCHES ".*/examples/.*") OR (${file} MATCHES ".*/extra/.*"))
+        if ((${file} MATCHES ".*/examples/.*") OR (${file} MATCHES ".*/extra/.*") OR (${file} MATCHES ".*/Template/.*"))
             message(VERBOSE "${file} skipped")
         else ()
             list(APPEND SOURCE_FILES2 ${file})

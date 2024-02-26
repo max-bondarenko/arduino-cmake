@@ -21,7 +21,9 @@ set(CMAKE_CXX_STANDARD 11)
 #        BOARD_CPU BLUEPILL_F103C6
 #        PORT /dev/ttyACM0
 #        )
-make_core_library(ASD "GenF1.BLACKPILL_F103C8")
+set(BOARD_CPU GENERIC_F103CBTX)
+make_core_library(ASD "GenF1.GENERIC_F103CBTX")
+
 #make_arduino_example(blink "Blink" ALL_SRCS "Basics" )
 #make_arduino_sketch(blink "/opt/arduino-1.8.19/examples/01.Basics/Blink" SKETCH_CPP )
 #generate_arduino_example(blink

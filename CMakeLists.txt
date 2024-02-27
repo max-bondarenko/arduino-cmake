@@ -25,9 +25,10 @@ set(CMAKE_CXX_STANDARD 11)
 # todo done stm
 #set(BOARD_CPU GENERIC_F103CBTX)
 #make_core_library(ASD "GenF1.GENERIC_F103CBTX")
-# todo  avr
-set(BOARD_CPU atmega168)
-make_core_library(ASD "nano.atmega168")
+# todo done avr with hack
+#set(BOARD_CPU atmega168)
+#set(CMAKE_CXX_FLAGS -Os)
+#make_core_library(ASD "nano.atmega168")
 
 
 # TODO use CMakeDependentOption !
@@ -40,9 +41,6 @@ make_core_library(ASD "nano.atmega168")
 
 set(test_LIB_SRC test-lib/for_lib_test.cpp test-lib/for_lib_test2.cpp)
 #find_arduino_libraries(FOUND_LIBS ${test_LIB_SRC} "")
-set(lib_name)
-set(C_FLAGS)
-set(L_FLAGS)
 set(ARDUINO_DEBUG TRUE)
 
 # Possible choice for STM32
@@ -57,8 +55,6 @@ set(ARDUINO_DEBUG TRUE)
 ##set(ARDUINO_DEFAULT_BOARD GenF1) # Default Board ID, when not specified
 #set(ARDUINO_DEFAULT_PORT  ttyACM0) # Default Port, when not specified
 
-
-#make_arduino_library (lib_name "GenF1.GENERIC_F103CBTX" ${lib_EEPROM-src} "-DA" "-lg")
 
 # TODO done
 #generate_library(test_lib

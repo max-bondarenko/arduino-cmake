@@ -122,13 +122,21 @@ function(set_board_flags TARGET_NAME BOARD_ID IS_MANUAL)
     set(flags)
     _get_board_property(${BOARD_ID} build.core BOARD_CORE)
     _get_board_property(${BOARD_ID} build.board BOARD)
+    list(APPEND flags ARDUINO=${NORMALIZED_SDK_VERSION})
+
     if (BOARD_CORE)
         if (CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
             _get_board_property(${BOARD_ID} build.f_cpu FCPU)
             _get_board_property(${BOARD_ID} build.mcu MCU)
+            _get_board_property(${BOARD_ID} build.board BOARD)
 
             list(APPEND flags F_CPU=${FCPU})
-            list(APPEND flags mmcu=${MCU})
+
+            add_compile_options(-mmcu=${MCU})
+            set(CMAKE_C_FLAGS "-mmcu=${MCU}")
+            set(CMAKE_CXX_FLAGS "-mmcu=${MCU}" PARENT_SCOPE) # TODO hack
+
+            list(APPEND flags ARDUINO_ARCH_AVR)
             list(APPEND flags ARDUINO_${BOARD})
         elseif (CMAKE_SYSTEM_PROCESSOR STREQUAL "stm32")
             #                                         TODO check -v- put it for test
@@ -159,14 +167,11 @@ function(set_board_flags TARGET_NAME BOARD_ID IS_MANUAL)
 
             add_to_compile_flags(build.error_led_port "ERROR_LED_PORT=")
             add_to_compile_flags(build.error_led_pin "ERROR_LED_PIN=")
-            #            add_to_compile_flags(build.board "ARDUINO_") # TODO !!
-            #            add_to_compile_flags(build.variant "BOARD_")# TODO !!
-        endif ()
-        target_compile_definitions(${TARGET_NAME}
-                PUBLIC ${flags}
-                )
 
-        #        set_board_linker_flags(LINK_FLAGS ${BOARD_ID} ${IS_MANUAL})
+            add_compile_definitions(ARDUINO_ARCH_STM32)
+        endif ()
+        target_compile_definitions(${TARGET_NAME} PUBLIC ${flags})
+        # TODO        set_board_linker_flags(LINK_FLAGS ${BOARD_ID} ${IS_MANUAL})
     else ()
         message(FATAL_ERROR "Invalid Arduino board ID (${BOARD_ID}), aborting.")
     endif ()

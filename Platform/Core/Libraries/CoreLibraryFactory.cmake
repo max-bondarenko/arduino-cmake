@@ -24,6 +24,7 @@ function(make_core_library OUTPUT_VAR BOARD_ID)
             # Debian/Ubuntu fix
             list(REMOVE_ITEM CORE_SRCS "${BOARD_CORE_PATH}/main.cxx")
 
+
             # TODO HAL ??
             #find_sources(HAL_SRCS ${PLATFORM_PATH}/system/Drivers/STM32F1xx_HAL_Driver/Src FALSE)
             #find_sources(HAL2_SRCS ${PLATFORM_PATH}/system/STM32F1xx FALSE)
@@ -43,7 +44,6 @@ function(make_core_library OUTPUT_VAR BOARD_ID)
             endif ()
 
             if (CMAKE_SYSTEM_PROCESSOR STREQUAL "stm32")
-                add_compile_definitions(ARDUINO_ARCH_STM32)
                 include_directories(${CMSIS_PATH}/Core/Include) #  TODO CMSIS
                 include_directories(
                         ${BOARD_CORE_PATH}/${CMAKE_SYSTEM_PROCESSOR}
@@ -51,8 +51,7 @@ function(make_core_library OUTPUT_VAR BOARD_ID)
                         ${BOARD_CORE_PATH}/${CMAKE_SYSTEM_PROCESSOR}/usb
                         ${BOARD_CORE_PATH}/${CMAKE_SYSTEM_PROCESSOR}/OpenAMP)
             elseif (CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
-                add_compile_definitions(ARDUINO_ARCH_AVR)
-                add_compile_definitions(ARDUINO_ARCH_NANO) # TODO hack!!
+                # avr
             else ()
                 # esp32
             endif ()
@@ -69,13 +68,11 @@ function(make_core_library OUTPUT_VAR BOARD_ID)
                 add_compile_definitions(VARIANT_H="${VARIANT_H}")
             endif ()
 
-            add_compile_definitions(${BUILD_SERIES}
-                    ARDUINO=${NORMALIZED_SDK_VERSION}
-                    ARDUINO_${BOARD_CPU}
-                    )
             add_library(${CORE_LIB_NAME} ${CORE_SRCS})
-
             set_board_flags(${CORE_LIB_NAME} ${BOARD_ID} FALSE)
+
+            set_target_properties(${CORE_LIB_NAME} PROPERTIES
+                    COMPILE_FLAGS ${CMAKE_CXX_FLAGS})  # TODO hack
         endif ()
         set(${OUTPUT_VAR} ${CORE_LIB_NAME} PARENT_SCOPE)
     else ()
